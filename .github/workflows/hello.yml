@@ -1,0 +1,16 @@
+name: Hello World Workflow
+
+on: [push]
+
+jobs:
+  say-hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say Hello
+        run: echo "Hello, Back-End Developers!"
+
+      - name: Show Python version
+        run: python --version
+
+      - name: Show My Name
+        run: echo "Developer: Your Name"
