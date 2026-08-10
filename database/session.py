@@ -1,19 +1,15 @@
 import os
-from sqlmodel import SQLModel, Session, create_engine
-from dotenv import load_dotenv
+from sqlmodel import SQLModel, create_engine, Session
 
-load_dotenv()
+# Fallback to SQLite if no DATABASE_URL environment variable is provided
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./clinicguard.db")
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/clinicguard")
+connect_args = {"check_same_thread": False} if "sqlite" in DATABASE_URL else {}
+engine = create_engine(DATABASE_URL, echo=True, connect_args=connect_args)
 
-engine = create_engine(DATABASE_URL, echo=True)
+def create_db_and_tables():
+    SQLModel.metadata.create_all(engine)
 
 def get_session():
     with Session(engine) as session:
         yield session
-
-def create_tables():
-    SQLModel.metadata.create_all(engine)
-
-# Alias for backwards compatibility with main.py
-create_db_and_tables = create_tables
