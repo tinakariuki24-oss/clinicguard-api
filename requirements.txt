@@ -2,5 +2,6 @@
 uvicorn
 sqlmodel
 pydantic
+slowapi
 pytest
 httpx
