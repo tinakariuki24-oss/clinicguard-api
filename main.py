@@ -4,6 +4,7 @@ from typing import List, Optional
 from datetime import datetime
 
 from fastapi import FastAPI, Depends, HTTPException, status, Query, Request
+from fastapi.responses import HTMLResponse
 from sqlmodel import Session, select
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
@@ -42,6 +43,195 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 @app.on_event("startup")
 def on_startup():
     create_db_and_tables()
+
+
+# --- Portfolio Homepage Endpoint ---
+
+@app.get("/", response_class=HTMLResponse)
+async def portfolio():
+    html_content = """
+<html>
+<head>
+<title>Student Portfolio - Backend Assignments</title>
+<style>
+body {
+font-family: 'Segoe UI', Arial, sans-serif;
+margin: 40px;
+background: #f5f5f5;
+}
+.container {
+max-width: 900px;
+margin: 0 auto;
+background: white;
+padding: 30px;
+border-radius: 10px;
+box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+h1 {
+color: #2c3e50;
+border-bottom: 3px solid #3498db;
+padding-bottom: 10px;
+}
+.student-info {
+background: #e8f4fd;
+padding: 15px;
+border-radius: 8px;
+margin: 20px 0;
+}
+.student-info strong {
+color: #2c3e50;
+}
+.admission {
+font-size: 1.2em;
+color: #2980b9;
+font-weight: bold;
+}
+.assignment {
+margin: 12px 0;
+padding: 15px;
+background: #f8f9fa;
+border-radius: 8px;
+border-left: 4px solid #3498db;
+transition: all 0.3s ease;
+}
+.assignment:hover {
+background: #e8f4fd;
+transform: translateX(5px);
+}
+.assignment a {
+color: #0366d6;
+text-decoration: none;
+font-weight: 500;
+display: flex;
+align-items: center;
+}
+.assignment a:hover {
+text-decoration: underline;
+}
+.badge {
+display: inline-block;
+background: #3498db;
+color: white;
+padding: 2px 10px;
+border-radius: 12px;
+font-size: 0.8em;
+margin-right: 10px;
+}
+.lesson-topic {
+color: #7f8c8d;
+font-size: 0.9em;
+margin-left: 10px;
+}
+.footer {
+margin-top: 30px;
+text-align: center;
+color: #95a5a6;
+font-size: 0.9em;
+border-top: 1px solid #ecf0f1;
+padding-top: 20px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1> Backend Development Portfolio</h1>
+<div class="student-info">
+<p> <strong>Student Name:</strong> Tina Kariuki</p>
+<p> <strong>Admission Number:</strong> <span class="admission">C027-01-0877/2024</span></p>
+<p> <strong>Email:</strong> tina.kariuki24@students.dkut.ac.ke</p>
+</div>
+<h2> Backend Assignments</h2>
+<p style="color: #7f8c8d; margin-bottom: 20px;">Click on any assignment to view the complete code on GitHub</p>
+
+<div class="assignment">
+<a href="https://github.com/tinakariuki24-oss/book-inventory-api" target="_blank">
+<span class="badge">Lesson 1</span>
+<span>HTTP & Your First API</span>
+<span class="lesson-topic">— FastAPI + Uvicorn, HTTP Methods, Status Codes</span>
+</a>
+</div>
+
+<div class="assignment">
+<a href="https://github.com/tinakariuki24-oss/book-inventory-api" target="_blank">
+<span class="badge">Lesson 2</span>
+<span>Docker - Packaging Your API</span>
+<span class="lesson-topic">— Containers, Dockerfiles, Docker Compose</span>
+</a>
+</div>
+
+<div class="assignment">
+<a href="https://github.com/tinakariuki24-oss/book-inventory-api" target="_blank">
+<span class="badge">Lesson 3</span>
+<span>Routing, Parameters & Request Bodies</span>
+<span class="lesson-topic">— Path Parameters, Query Parameters, Pydantic Validation</span>
+</a>
+</div>
+
+<div class="assignment">
+<a href="https://github.com/tinakariuki24-oss/book-inventory-api" target="_blank">
+<span class="badge">Lesson 4</span>
+<span>PostgreSQL & SQLModel – Your First Database</span>
+<span class="lesson-topic">— ORM, Database Migrations, SQLModel</span>
+</a>
+</div>
+
+<div class="assignment">
+<a href="https://github.com/tinakariuki24-oss/book-inventory-api" target="_blank">
+<span class="badge">Lesson 5</span>
+<span>CRUD Operations</span>
+<span class="lesson-topic">— Create, Read, Update, Delete with Error Handling</span>
+</a>
+</div>
+
+<div class="assignment">
+<a href="https://github.com/tinakariuki24-oss/book-inventory-api" target="_blank">
+<span class="badge">Lesson 6</span>
+<span>Error Handling & Validation</span>
+<span class="lesson-topic">— HTTPException, Custom Validators, Global Handlers</span>
+</a>
+</div>
+
+<div class="assignment">
+<a href="https://github.com/tinakariuki24-oss/healthtrack-api" target="_blank">
+<span class="badge">Lesson 7</span>
+<span>User Authentication – JWT & Password Hashing</span>
+<span class="lesson-topic">— JWT Tokens, bcrypt, Login/Register Endpoints</span>
+</a>
+</div>
+
+<div class="assignment">
+<a href="https://github.com/tinakariuki24-oss/clinicguard-api" target="_blank">
+<span class="badge">Lesson 8</span>
+<span>Authorization & Rate Limiting</span>
+<span class="lesson-topic">— RBAC, Dependency Injection, Rate Limiting</span>
+</a>
+</div>
+
+<div class="assignment">
+<a href="https://github.com/tinakariuki24-oss/clinicguard-api" target="_blank">
+<span class="badge">Lesson 9</span>
+<span>File Uploads & External APIs</span>
+<span class="lesson-topic">— File Validation, httpx, Environment Variables</span>
+</a>
+</div>
+
+<div class="assignment">
+<a href="https://github.com/tinakariuki24-oss/clinicguard-api" target="_blank">
+<span class="badge">Lesson 10</span>
+<span>Testing & Deployment (Cloud)</span>
+<span class="lesson-topic">— Pytest, CI/CD, Render Deployment</span>
+</a>
+</div>
+
+<div class="footer">
+<p> Deployed on Render | Last Updated: August 2026</p>
+<p style="font-size: 0.8em;"> Click on any assignment link to view the complete source code on GitHub</p>
+</div>
+</div>
+</body>
+</html>
+"""
+    return HTMLResponse(content=html_content)
 
 
 # --- Audit Logging Helper ---
