@@ -1,6 +1,8 @@
 name: Hello World Workflow
 
-on: [push]
+on:
+  push:
+    branches: [ main ]
 
 jobs:
   say-hello:
@@ -13,4 +15,4 @@ jobs:
         run: python --version
 
       - name: Show My Name
-        run: echo "Developer: Your Name"
+        run: echo "Developer: Vee"
